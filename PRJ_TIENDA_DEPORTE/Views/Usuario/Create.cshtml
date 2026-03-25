@@ -1,0 +1,96 @@
+@model PRJ_SEMANA_03_S01.Models.Usuario
+@{
+    var empleados = ViewBag.Empleados as List<PRJ_SEMANA_03_S01.Models.Empleado> ?? new();
+}
+
+<h2>Nuevo Usuario</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="row">
+        <div class="mb-3 col-md-6">
+            <label class="form-label">Empleado</label>
+            <select asp-for="idempl" class="form-select" id="idempl">
+                <option value="">-- Seleccione --</option>
+                @foreach (var e in empleados)
+                {
+                    var nombre = (e.nomempl ?? "").Trim().ToUpperInvariant();
+                    var apellido = (e.apeempl ?? "").Trim().ToUpperInvariant();
+                    var cargo = (e.nomcargo ?? "").Trim().ToUpperInvariant();
+
+                    // Lógica de detección de Rol para el atributo data-rol
+                    var rol = (nombre == "DANTEX" && apellido == "ESQUIVAL") ? "ADMIN" :
+                    (cargo == "ADMINISTRADOR" ? "ADMINISTRADOR" : "CAJERO");
+
+                    <option value="@e.idempl" data-rol="@rol">@e.nomempl @e.apeempl (@cargo)</option>
+                }
+            </select>
+            <span asp-validation-for="idempl" class="text-danger"></span>
+            <small class="text-muted d-block">Solo empleados activos sin usuario.</small>
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label class="form-label">Rol Asignado</label>
+            <input type="text" id="rolNombre" class="form-control" readonly style="background-color: #f8f9fa;" placeholder="Se asignará automáticamente" />
+            <input type="hidden" asp-for="idrol" id="idrolHidden" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-6">
+            <label class="form-label">Username</label>
+            <input asp-for="username" id="usernameInput" class="form-control" maxlength="20" autocomplete="off" />
+            <span asp-validation-for="username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label class="form-label">Contraseña</label>
+            <input asp-for="password" type="password" id="passwordInput" class="form-control" maxlength="30" />
+            <span asp-validation-for="password" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3 col-md-4">
+        <label class="form-label">Estado</label>
+        <select asp-for="estadousuario" class="form-select">
+            <option value="ACTIVO">ACTIVO</option>
+            <option value="INACTIVO">INACTIVO</option>
+        </select>
+    </div>
+
+    <hr />
+    <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <script>
+        const cboEmpleado = document.getElementById('idempl');
+        const txtRolVisible = document.getElementById('rolNombre');
+
+        function actualizarRol() {
+            const opcion = cboEmpleado.options[cboEmpleado.selectedIndex];
+            if (opcion && opcion.value !== "") {
+                txtRolVisible.value = opcion.dataset.rol;
+            } else {
+                txtRolVisible.value = "";
+            }
+        }
+
+        cboEmpleado.addEventListener('change', actualizarRol);
+
+        // Ejecutar al cargar por si hay un valor previo (postback)
+        actualizarRol();
+
+        // Validaciones de entrada
+        document.getElementById('usernameInput')?.addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z0-9_.]/g, '');
+        });
+    </script>
+}

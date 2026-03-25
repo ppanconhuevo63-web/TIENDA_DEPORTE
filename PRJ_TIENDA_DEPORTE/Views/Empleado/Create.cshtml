@@ -1,0 +1,52 @@
+@model PRJ_SEMANA_03_S01.Models.Empleado
+@{
+    var cargos = ViewBag.Cargos as List<PRJ_SEMANA_03_S01.Models.Cargo> ?? new();
+}
+
+<h2>Nuevo Empleado</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="mb-3 col-md-4">
+        <label class="form-label">Cargo</label>
+        <select asp-for="idcargo" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var c in cargos)
+            {
+                <option value="@c.idcargo">@c.nomcargo</option>
+            }
+        </select>
+        <span asp-validation-for="idcargo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 col-md-4">
+        <label class="form-label">Nombre</label>
+        <input asp-for="nomempl" class="form-control" maxlength="20" />
+        <span asp-validation-for="nomempl" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 col-md-4">
+        <label class="form-label">Apellido</label>
+        <input asp-for="apeempl" class="form-control" maxlength="20" />
+        <span asp-validation-for="apeempl" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 col-md-4">
+        <label class="form-label">DNI</label>
+        <input asp-for="dniempl" class="form-control" maxlength="8" pattern="[0-9]*" inputmode="numeric" />
+        <span asp-validation-for="dniempl" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3 col-md-4">
+        <label class="form-label">Estado</label>
+        <select asp-for="estadoempleado" class="form-select">
+            <option value="ACTIVO" selected="@(Model.estadoempleado == "ACTIVO")">ACTIVO</option>
+            <option value="INACTIVO" selected="@(Model.estadoempleado == "INACTIVO")">INACTIVO</option>
+        </select>
+        <span asp-validation-for="estadoempleado" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

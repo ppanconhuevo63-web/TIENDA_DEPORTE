@@ -1,0 +1,102 @@
+@using System.Globalization
+@model PRJ_SEMANA_03_S01.Models.Cargo
+
+<h2>Editar Cargo</h2>
+
+<form asp-action="Edit" method="post" id="formEdit">
+    <input type="hidden" asp-for="idcargo" />
+
+    <div class="mb-3 col-md-5">
+        <label class="form-label">Nombre</label>
+        <input asp-for="nomcargo" class="form-control" id="nomcargo" maxlength="55" />
+        <span asp-validation-for="nomcargo" class="text-danger"></span>
+        <small id="avisoCargo" class="text-danger d-none">No se permite usar ADMIN o ADMINISTRADOR en el nombre del cargo.</small>
+    </div>
+
+    <div class="mb-3 col-md-4">
+        <label class="form-label">Sueldo</label>
+        <input type="text" name="sueldo" id="sueldo" class="form-control"
+               value="@Model.sueldo.ToString("0.00", CultureInfo.InvariantCulture)"
+               inputmode="decimal" maxlength="13" autocomplete="off" placeholder="1050.20" />
+        <span asp-validation-for="sueldo" class="text-danger"></span>
+        <small class="text-muted">Use punto decimal. Ejemplo: 1050.20</small>
+    </div>
+
+    <div class="mb-3 col-md-4">
+        <label class="form-label">Estado</label>
+        <select asp-for="estadocargo" class="form-select">
+            <option value="ACTIVO" selected="@(Model.estadocargo == "ACTIVO")">ACTIVO</option>
+            <option value="INACTIVO" selected="@(Model.estadocargo == "INACTIVO")">INACTIVO</option>
+        </select>
+        <span asp-validation-for="estadocargo" class="text-danger"></span>
+    </div>
+
+    <button type="button" class="btn btn-warning" onclick="mensaje()">Actualizar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+<script>
+    const txtCargo = document.getElementById('nomcargo');
+    const avisoCargo = document.getElementById('avisoCargo');
+    const txtSueldo = document.getElementById('sueldo');
+
+    function validarCargoReservado() {
+        const valor = (txtCargo.value || '').trim().toUpperCase();
+        const bloqueado = valor === 'ADMIN' || valor === 'ADMINISTRADOR';
+        avisoCargo.classList.toggle('d-none', !bloqueado);
+        txtCargo.classList.toggle('is-invalid', bloqueado);
+        return !bloqueado;
+    }
+
+    function normalizarSueldo() {
+        let valor = txtSueldo.value || '';
+        valor = valor.replace(/,/g, '');
+        valor = valor.replace(/[^\d.]/g, '');
+        const partes = valor.split('.');
+        if (partes.length > 2) {
+            valor = partes[0] + '.' + partes.slice(1).join('');
+        }
+        const nuevasPartes = valor.split('.');
+        if (nuevasPartes.length === 2) {
+            nuevasPartes[1] = nuevasPartes[1].slice(0, 2);
+            valor = nuevasPartes[0] + '.' + nuevasPartes[1];
+        }
+        txtSueldo.value = valor;
+        return /^\d+(\.\d{1,2})?$/.test(valor);
+    }
+
+    txtCargo.addEventListener('input', validarCargoReservado);
+    txtSueldo.addEventListener('input', normalizarSueldo);
+
+    function mensaje() {
+        const sueldoValido = normalizarSueldo();
+        if (!validarCargoReservado()) return;
+        if (!sueldoValido) {
+            txtSueldo.classList.add('is-invalid');
+            return;
+        }
+        txtSueldo.classList.remove('is-invalid');
+        Swal.fire({
+            title: "¿Actualizar cargo?",
+            text: "Se guardarán los cambios.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Sí, actualizar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("formEdit").submit();
+            }
+        });
+    }
+            document.getElementById('formEdit').addEventListener('submit', function (e) {
+            const sueldoValido = normalizarSueldo();
+            const cargoValido = validarCargoReservado();
+            if (!cargoValido || !sueldoValido) {
+                txtSueldo.classList.toggle('is-invalid', !sueldoValido);
+                e.preventDefault();
+            }
+        });
+</script>
+}

@@ -1,0 +1,53 @@
+@model PRJ_SEMANA_03_S01.Models.Proveedor
+
+<h2>Edit</h2>
+
+<form asp-action="Edit" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input type="hidden" asp-for="idproveedor" />
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">RUC</label>
+            <input asp-for="ruc" class="form-control" />
+            <span asp-validation-for="ruc" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-8">
+            <label class="form-label">Razón Social</label>
+            <input asp-for="razonsocial" class="form-control" />
+            <span asp-validation-for="razonsocial" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Teléfono</label>
+            <input asp-for="telefono" class="form-control" />
+            <span asp-validation-for="telefono" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Email</label>
+            <input asp-for="email" class="form-control" />
+            <span asp-validation-for="email" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Estado</label>
+            <select asp-for="estadoproveedor" class="form-select">
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+            </select>
+        </div>
+
+        <div class="col-md-12">
+            <label class="form-label">Dirección</label>
+            <input asp-for="direccion" class="form-control" />
+            <span asp-validation-for="direccion" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-success">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>

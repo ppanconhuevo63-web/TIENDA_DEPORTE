@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TIENDA_DEPORTE</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TIENDA_DEPORTE.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">TIENDA DEPORTE</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuApp">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="menuApp">
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a></li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Ventas</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Cliente" asp-action="Index">Clientes</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Venta" asp-action="Index">Venta</a></li>
+                                    <li><a class="dropdown-item" asp-controller="DetalleVenta" asp-action="Index">Detalle Venta</a></li>
+                                </ul>
+                            </li>
+
+                            @if (User.IsInRole("ADMIN") || User.IsInRole("ADMINISTRADOR"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Compras</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="Proveedor" asp-action="Index">Proveedor</a></li>
+                                        <li><a class="dropdown-item" asp-controller="OrdenCompra" asp-action="Index">Orden Compra</a></li>
+                                        <li><a class="dropdown-item" asp-controller="DetalleCompra" asp-action="Index">Detalle Compra</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Logística</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="Categoria" asp-action="Index">Categoría</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">Producto</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Kardex" asp-action="Index">Kardex</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Personal</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="Empleado" asp-action="Index">Empleado</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Cargo" asp-action="Index">Cargo</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Seguridad</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Index">Usuario</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Rol" asp-action="Index">Rol</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+
+                        <div class="d-flex text-white align-items-center gap-3">
+                            <span><strong>@User.FindFirst("NombreCompleto")?.Value</strong> - @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</span>
+                            <a class="btn btn-outline-light btn-sm" asp-controller="Login" asp-action="Logout">Salir</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-4">
+        <div class="container">&copy; 2026 - TIENDA_DEPORTE</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

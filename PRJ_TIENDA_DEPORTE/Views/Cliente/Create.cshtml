@@ -1,0 +1,59 @@
+@model PRJ_SEMANA_03_S01.Models.Cliente
+
+<h2>Create</h2>
+
+<form asp-action="Create" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input type="hidden" asp-for="idcliente" />
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input asp-for="nomcliente" class="form-control" />
+            <span asp-validation-for="nomcliente" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Apellido</label>
+            <input asp-for="apecliente" class="form-control" />
+            <span asp-validation-for="apecliente" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">DNI</label>
+            <input asp-for="dnicliente" class="form-control" />
+            <span asp-validation-for="dnicliente" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Teléfono</label>
+            <input asp-for="telefonocliente" class="form-control" />
+            <span asp-validation-for="telefonocliente" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Estado</label>
+            <select asp-for="estadocliente" class="form-select">
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input asp-for="emailcliente" class="form-control" />
+            <span asp-validation-for="emailcliente" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Dirección</label>
+            <input asp-for="direccioncliente" class="form-control" />
+            <span asp-validation-for="direccioncliente" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-success">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>

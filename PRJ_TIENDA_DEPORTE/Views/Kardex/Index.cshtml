@@ -1,0 +1,5 @@
+@model List<PRJ_SEMANA_03_S01.Models.Kardex>
+<h2>Kardex</h2>
+<a asp-action="Create" class="btn btn-primary">Nuevo</a>
+<table class="table mt-3 table-bordered"><thead><tr><th>Id</th><th>Producto</th><th>Fecha</th><th>Tipo</th><th>Cantidad</th><th>Costo</th><th>N° Factura</th><th>Observación</th><th>Acciones</th></tr></thead><tbody>@foreach (var item in Model){<tr><td>@item.idkardex</td><td>@item.nomproducto</td><td>@item.fechamov</td><td>@item.tipomov</td><td>@item.cantidad</td><td>@item.costounitario</td><td>@item.nfactura</td><td>@item.observacion</td><td><a asp-action="Edit" asp-route-id="@item.idkardex" class="btn btn-warning btn-sm">Edit</a> <a asp-action="Delete" asp-route-id="@item.idkardex" class="btn btn-danger btn-sm" onclick="confirmarEliminar(event)">Delete</a></td></tr>}</tbody></table>
+<script>function confirmarEliminar(e){e.preventDefault();const url=e.currentTarget.href;Swal.fire({title:"¿Eliminar kardex?",text:"Esta acción no se puede deshacer.",icon:"warning",showCancelButton:true,confirmButtonText:"Sí, eliminar",cancelButtonText:"Cancelar"}).then((r)=>{if(r.isConfirmed){window.location.href=url;}});}</script>

@@ -1,0 +1,65 @@
+@model PRJ_SEMANA_03_S01.Models.Venta
+@{
+    var clientes = ViewBag.Clientes as List<PRJ_SEMANA_03_S01.Models.Cliente>;
+    string empleadoActualTexto = ViewBag.EmpleadoActualTexto as string ?? string.Empty;
+}
+<h2>Editar Venta</h2>
+<form asp-action="Edit" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    @Html.AntiForgeryToken()
+    <input asp-for="idventa" type="hidden" />
+    <input asp-for="idempl" type="hidden" />
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Cliente</label>
+            <select asp-for="idcliente" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var c in clientes ?? new())
+                {
+                    <option value="@c.idcliente">@c.nomcliente @c.apecliente</option>
+                }
+            </select>
+            <!-- ESTO ES LO QUE MUESTRA EL ERROR -->
+            <span asp-validation-for="idcliente" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Empleado</label>
+            <input type="text" class="form-control bg-light" value="@empleadoActualTexto" readonly />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Fecha</label>
+            <input asp-for="fechaventa" type="datetime-local" value="@Model.fechaventa.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+            <span asp-validation-for="fechaventa" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Total</label>
+            <input asp-for="total" readonly class="form-control bg-light" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Método Pago</label>
+            <select asp-for="metodopago" class="form-select">
+                <option value="EFECTIVO">EFECTIVO</option>
+                <option value="TARJETA">TARJETA</option>
+                <option value="YAPE">YAPE</option>
+                <option value="PLIN">PLIN</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Estado</label>
+            <select asp-for="estadoventa" class="form-select">
+                <option value="EMITIDA">EMITIDA</option>
+                <option value="ANULADA">ANULADA</option>
+            </select>
+        </div>
+    </div>
+    <div class="alert alert-info mt-3">El total de la venta se actualiza automáticamente según los subtotales del detalle de venta.</div>
+    <div class="mt-3">
+        <button class="btn btn-success">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

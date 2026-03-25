@@ -1,0 +1,33 @@
+@model PRJ_SEMANA_03_S01.Models.Rol
+
+<h2>Editar Rol</h2>
+
+<form asp-action="Edit" method="post" id="formEdit">
+    <input type="hidden" asp-for="idrol" />
+
+    <div class="mb-3">
+        <label>Nombre del Rol</label>
+        <input asp-for="nombrerol" class="form-control" />
+        <span asp-validation-for="nombrerol" class="text-danger"></span>
+    </div>
+
+    <button type="button" class="btn btn-warning" onclick="mensaje()">Actualizar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<script>
+    function mensaje() {
+        Swal.fire({
+            title: "¿Actualizar rol?",
+            text: "Se guardarán los cambios.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Sí, actualizar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("formEdit").submit();
+            }
+        });
+    }
+</script>

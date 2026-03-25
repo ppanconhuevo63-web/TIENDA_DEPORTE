@@ -1,0 +1,77 @@
+@model List<PRJ_SEMANA_03_S01.Models.Usuario>
+@{
+    bool esAdminPrincipal = ViewBag.EsAdminPrincipal ?? false;
+    string usuarioActual = ViewBag.UsuarioActual as string ?? "";
+}
+
+<h2>Listado de Usuarios</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Empleado</th>
+            <th>Usuario</th>
+            <th>Contraseña</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Fecha Creación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            bool esPropio = string.Equals(item.username, usuarioActual, StringComparison.OrdinalIgnoreCase);
+            bool esAdmin = string.Equals(item.nombrerol, "ADMIN", StringComparison.OrdinalIgnoreCase);
+            bool puedeEliminar = esAdminPrincipal ? !esPropio : (!esPropio && !esAdmin && string.Equals(item.nombrerol, "CAJERO", StringComparison.OrdinalIgnoreCase));
+
+            <tr>
+                <td>@item.idusuario</td>
+                <td>@(string.IsNullOrWhiteSpace(item.nombreempleado) ? "SIN EMPLEADO" : item.nombreempleado)</td>
+                <td>@item.username</td>
+                <td>@item.password</td>
+                <td>@item.nombrerol</td>
+                <td>@item.estadousuario</td>
+                <td>@item.fechacreacion?.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.idusuario" class="btn btn-warning">Editar</a>
+                    @if (puedeEliminar)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.idusuario" class="btn btn-danger" onclick="confirmarEliminar(event)">Eliminar</a>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-danger" disabled>Eliminar</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function confirmarEliminar(e) {
+        e.preventDefault();
+        const url = e.currentTarget.href;
+        Swal.fire({
+            title: "¿Eliminar usuario?",
+            text: "Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+</script>

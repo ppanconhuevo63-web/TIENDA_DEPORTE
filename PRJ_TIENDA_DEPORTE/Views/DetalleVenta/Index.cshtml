@@ -1,0 +1,7 @@
+@model List<PRJ_SEMANA_03_S01.Models.DetalleVenta>
+<h2>Detalle Venta</h2>
+<a asp-action="Create" class="btn btn-primary">Nuevo</a>
+<table class="table mt-3 table-bordered">
+<thead><tr><th>Id</th><th>Venta</th><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th>Acciones</th></tr></thead>
+<tbody>@foreach (var item in Model){<tr><td>@item.iddetalleventa</td><td>@item.idventa</td><td>@item.nomproducto</td><td>@item.cantidad</td><td>@item.preciounitario</td><td>@item.subtotal</td><td><a asp-action="Edit" asp-route-id="@item.iddetalleventa" class="btn btn-warning btn-sm">Edit</a> <a asp-action="Delete" asp-route-id="@item.iddetalleventa" class="btn btn-danger btn-sm" onclick="confirmarEliminar(event)">Delete</a></td></tr>}</tbody></table>
+<script>function confirmarEliminar(e){e.preventDefault();const url=e.currentTarget.href;Swal.fire({title:"¿Eliminar detalle?",text:"Esta acción no se puede deshacer.",icon:"warning",showCancelButton:true,confirmButtonText:"Sí, eliminar",cancelButtonText:"Cancelar"}).then((r)=>{if(r.isConfirmed){window.location.href=url;}});}</script>

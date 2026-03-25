@@ -1,0 +1,71 @@
+@using System.Globalization
+@model List<PRJ_SEMANA_03_S01.Models.Cargo>
+@{
+    bool esAdminPrincipal = ViewBag.EsAdminPrincipal ?? false;
+}
+
+<h2>Listado de Cargo</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<a asp-action="Create" class="btn btn-primary">Nuevo Cargo</a>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Sueldo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            bool protegido = string.Equals(item.nomcargo, "ADMIN", StringComparison.OrdinalIgnoreCase)
+                             || string.Equals(item.nomcargo, "ADMINISTRADOR", StringComparison.OrdinalIgnoreCase);
+            bool permitirAccion = esAdminPrincipal || !protegido;
+            <tr>
+                <td>@item.idcargo</td>
+                <td>@item.nomcargo</td>
+                <td>@item.sueldo.ToString("0.00", CultureInfo.InvariantCulture)</td>
+                <td>@item.estadocargo</td>
+                <td>
+                    @if (permitirAccion)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.idcargo" class="btn btn-warning">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.idcargo" class="btn btn-danger" onclick="confirmarEliminar(event)">Eliminar</a>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-warning" disabled>Editar</button>
+                        <button type="button" class="btn btn-danger" disabled>Eliminar</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function confirmarEliminar(e) {
+        e.preventDefault();
+        const url = e.currentTarget.href;
+        Swal.fire({
+            title: "¿Eliminar cargo?",
+            text: "Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+</script>

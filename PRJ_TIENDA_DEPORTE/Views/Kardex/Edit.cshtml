@@ -1,0 +1,62 @@
+@model PRJ_SEMANA_03_S01.Models.Kardex
+@{ var productos = ViewBag.Productos as List<PRJ_SEMANA_03_S01.Models.Producto>; }
+<h2>Editar Kardex</h2>
+<form asp-action="Edit" method="post" class="mt-3">
+    <!-- AGREGA ESTA LÍNEA SI NO LA TIENES -->
+    <input type="hidden" asp-for="idkardex" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="col-md-4">
+        <label class="form-label">Cantidad</label>
+        <input asp-for="cantidad"
+               class="form-control"
+               type="number"
+               min="0"
+               max="999999" /> <!-- 1 millón menos 1 -->
+    </div>
+    <span asp-validation-for="cantidad" class="text-danger"></span>
+
+    <div class="col-md-4">
+        <label class="form-label">Costo Unitario</label>
+        <input asp-for="costounitario"
+               class="form-control"
+               type="text"
+               inputmode="decimal"
+               oninput="validarCostoUnitario(this)" />
+    </div>
+    <span asp-validation-for="costounitario" class="text-danger"></span>
+
+    <div class="col-md-6">
+        <label class="form-label">N° Factura</label>
+        <input asp-for="nfactura"
+               class="form-control"
+               maxlength="60" /> <!-- máximo permitido por la base -->
+    </div>
+    <span asp-validation-for="nfactura" class="text-danger"></span>
+
+    <div class="col-md-6">
+        <label class="form-label">Observación</label>
+        <input asp-for="observacion"
+               class="form-control"
+               maxlength="200" /> <!-- máximo permitido por la base -->
+    </div>
+    <span asp-validation-for="observacion" class="text-danger"></span>
+
+    <div class="mt-3"><button class="btn btn-success">Guardar</button> <a asp-action="Index" class="btn btn-secondary">Volver</a></div>
+</form>
+<script>
+    function validarCostoUnitario(input) {
+        let valor = input.value;
+
+        // ❌ Permitir solo números y un punto decimal
+        valor = valor.replace(/[^0-9.]/g, '');
+        valor = valor.replace(/(\..*?)\..*/g, '$1');
+
+        let partes = valor.split('.');
+        // Máximo 8 dígitos enteros (DECIMAL(10,2) → 99999999.99)
+        partes[0] = partes[0].slice(0, 8);
+        // Máximo 2 decimales
+        if (partes.length > 1) partes[1] = partes[1].slice(0, 2);
+
+        input.value = partes.join('.');
+    }
+</script>

@@ -1,0 +1,47 @@
+@model List<PRJ_SEMANA_03_S01.Models.Rol>
+@{
+    bool esAdminPrincipal = ViewBag.EsAdminPrincipal ?? false;
+}
+
+<h2>Listado de Roles</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="alert alert-info">
+    Los roles del sistema están fijos: <strong>ADMIN</strong>, <strong>ADMINISTRADOR</strong> y <strong>CAJERO</strong>.
+</div>
+
+@if (esAdminPrincipal)
+{
+    <button type="button" class="btn btn-primary" disabled>Nuevo Rol</button>
+}
+else
+{
+    <button type="button" class="btn btn-primary" disabled>Nuevo Rol</button>
+}
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre del Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.idrol</td>
+                <td>@item.nombrerol</td>
+                <td>
+                    <button type="button" class="btn btn-warning" disabled>Editar</button>
+                    <button type="button" class="btn btn-danger" disabled>Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

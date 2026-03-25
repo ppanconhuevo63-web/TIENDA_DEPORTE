@@ -1,0 +1,80 @@
+@model PRJ_SEMANA_03_S01.Models.Usuario
+@{
+    var empleados = ViewBag.Empleados as List<PRJ_SEMANA_03_S01.Models.Empleado> ?? new();
+    bool bloquearEmpleado = ViewBag.BloquearEmpleado ?? false;
+    string nombreRol = ViewBag.NombreRol as string ?? Model.nombrerol ?? "";
+}
+
+<h2>Editar Usuario</h2>
+
+<form asp-action="Edit" method="post" id="formEdit">
+    <input type="hidden" asp-for="idusuario" />
+    <input type="hidden" asp-for="idrol" />
+
+    <div class="mb-3 col-md-6">
+        <label class="form-label">Empleado</label>
+        <select class="form-select" disabled style="background-color: #e9ecef; cursor: not-allowed;">
+            <option value="@Model.idempl" selected>@Model.nombreempleado</option>
+        </select>
+        @* Input hidden para enviar el ID al servidor *@
+        <input type="hidden" asp-for="idempl" />
+    </div>
+
+      
+    <div class="mb-3 col-md-6">
+        <label class="form-label">Usuario (Username)</label>
+        <input asp-for="username" id="usernameInput" class="form-control" maxlength="20" />
+        <span asp-validation-for="username" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="form-label">Contraseña</label>
+            <input asp-for="password" id="passwordInput" class="form-control" maxlength="30" />
+            <span asp-validation-for="password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 col-md-4">
+            <label class="form-label">Rol</label>
+            <input type="text" class="form-control" value="@nombreRol" readonly style="background-color: #f8f9fa;" />
+        </div>
+
+        <div class="mb-3 col-md-4">
+            <label class="form-label">Estado</label>
+            <select asp-for="estadousuario" class="form-select">
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+            </select>
+            <span asp-validation-for="estadousuario" class="text-danger"></span>
+        </div>
+    </div>
+
+    <hr />
+    <button type="button" class="btn btn-warning" onclick="mensaje()">Actualizar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<script>
+    function mensaje() {
+        const username = document.getElementById('usernameInput')?.value.trim() || "bloqueado";
+        const password = document.getElementById('passwordInput').value.trim();
+
+        if(!password) {
+            Swal.fire('Error', 'La contraseña es obligatoria', 'error');
+            return;
+        }
+
+        Swal.fire({
+            title: "¿Actualizar usuario?",
+            text: "Se guardarán los cambios en el sistema.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Sí, actualizar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("formEdit").submit();
+            }
+        });
+    }
+</script>

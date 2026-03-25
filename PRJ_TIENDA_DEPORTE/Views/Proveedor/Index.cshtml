@@ -1,0 +1,57 @@
+@model List<PRJ_SEMANA_03_S01.Models.Proveedor>
+
+<h2>Proveedor</h2>
+<a asp-action="Create" class="btn btn-primary">Nuevo</a>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>RUC</th>
+            <th>Razón Social</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Dirección</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.idproveedor</td>
+                <td>@item.ruc</td>
+                <td>@item.razonsocial</td>
+                <td>@item.telefono</td>
+                <td>@item.email</td>
+                <td>@item.direccion</td>
+                <td>@item.estadoproveedor</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.idproveedor" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.idproveedor" class="btn btn-danger btn-sm" onclick="confirmarEliminar(event)">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function confirmarEliminar(e) {
+      e.preventDefault();
+      const url = e.currentTarget.href;
+
+      Swal.fire({
+        title: "¿Eliminar proveedor?",
+        text: "Esta acción no se puede deshacer.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = url;
+        }
+      });
+    }
+</script>

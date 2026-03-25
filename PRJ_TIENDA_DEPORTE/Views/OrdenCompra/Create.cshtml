@@ -1,0 +1,58 @@
+@model PRJ_SEMANA_03_S01.Models.OrdenCompra
+@{
+    var proveedores = ViewBag.Proveedores as List<PRJ_SEMANA_03_S01.Models.Proveedor>;
+    string empleadoActualTexto = ViewBag.EmpleadoActualTexto as string ?? string.Empty;
+}
+<h2>Nueva Orden Compra</h2>
+<form asp-action="Create" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    @Html.AntiForgeryToken()
+    <input asp-for="idempl" type="hidden" />
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Proveedor</label>
+            <select asp-for="idproveedor" class="form-select">
+                <option value="0">-- Seleccione --</option>
+                @foreach (var p in proveedores ?? new())
+                {
+                    <option value="@p.idproveedor">@p.razonsocial</option>
+                }
+            </select>
+            <span asp-validation-for="idproveedor" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Empleado</label>
+            <input type="text" class="form-control bg-light" value="@empleadoActualTexto" readonly />
+            <span asp-validation-for="idempl" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Fecha</label>
+            <input asp-for="fechaorden" type="datetime-local" value="@Model.fechaorden.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+            <span asp-validation-for="fechaorden" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Total</label>
+            <input asp-for="total" readonly class="form-control bg-light" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Estado</label>
+            <select asp-for="estado" class="form-select">
+                <option value="REGISTRADA">REGISTRADA</option>
+                <option value="RECIBIDA">RECIBIDA</option>
+                <option value="ANULADA">ANULADA</option>
+            </select>
+        </div>
+    </div>
+    <div class="alert alert-info mt-3">El total se calcula automáticamente desde los detalles de compra.</div>
+    <div class="mt-3">
+        <button class="btn btn-success">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
+
+@section Scripts {
+    <!-- 3. OBLIGATORIO: Para que la validación funcione en el navegador -->
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

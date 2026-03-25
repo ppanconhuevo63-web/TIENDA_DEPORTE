@@ -1,0 +1,18 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{28F27330-F8DA-4344-A0F0-D5E6839CC8CE}") = "PRJ_SEMANA_03_S01", "PRJ_TIENDA_DEPORTE\PRJ_SEMANA_03_S01.csproj", "{FA4570DF-4BEE-4AB4-982B-517A318EFF94}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA4570DF-4BEE-4AB4-982B-517A318EFF94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA4570DF-4BEE-4AB4-982B-517A318EFF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA4570DF-4BEE-4AB4-982B-517A318EFF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA4570DF-4BEE-4AB4-982B-517A318EFF94}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

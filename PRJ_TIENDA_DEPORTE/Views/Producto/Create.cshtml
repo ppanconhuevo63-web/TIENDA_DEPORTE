@@ -1,0 +1,82 @@
+@model PRJ_SEMANA_03_S01.Models.Producto
+@{ var categorias = ViewBag.Categorias as List<PRJ_SEMANA_03_S01.Models.Categoria>; }
+<h2>Nuevo Producto</h2>
+<form asp-action="Create" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Categoría</label>
+            <select asp-for="idcategoria" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var c in categorias ?? new())
+                {
+                    <option value="@c.idcategoria">@c.nomcategoria</option>
+                }
+            </select>
+            <span asp-validation-for="idcategoria" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Estado</label>
+            <select asp-for="estadoproducto" class="form-select">
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+            </select>
+            <span asp-validation-for="estadoproducto" class="text-danger"></span>
+        </div>
+        <div class="col-md-6"><label class="form-label">Estado</label><select asp-for="estadoproducto" class="form-select"><option value="ACTIVO">ACTIVO</option><option value="INACTIVO">INACTIVO</option></select></div>
+        <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input asp-for="nomproducto" class="form-control" maxlength="80" />
+        </div>
+
+        <span asp-validation-for="nomproducto" class="text-danger"></span>
+        <div class="col-md-3">
+            <label class="form-label">Marca</label>
+            <input asp-for="marca" class="form-control" maxlength="50" />
+        </div>
+
+        <span asp-validation-for="marca" class="text-danger"></span>
+        <div class="col-md-3">
+            <label class="form-label">Talla</label>
+            <input asp-for="talla" class="form-control" maxlength="10" />
+        </div>
+
+        <span asp-validation-for="talla" class="text-danger"></span>
+        <div class="col-md-4">
+            <label class="form-label">Color</label>
+            <input asp-for="color" class="form-control" maxlength="30" />
+        </div>
+        <span asp-validation-for="color" class="text-danger"></span>
+        <div class="col-md-4">
+            <label class="form-label">Precio</label>
+            <input asp-for="precio"
+                   class="form-control"
+                   type="text"
+                   inputmode="decimal"
+                   oninput="validarPrecio(this)" />
+        </div>
+        <span asp-validation-for="precio" class="text-danger"></span>
+        <div class="col-md-4"><label class="form-label">Stock</label><input asp-for="stock" class="form-control" /></div>
+        <span asp-validation-for="stock" class="text-danger"></span>
+    </div>
+    <div class="mt-3"><button class="btn btn-success">Guardar</button> <a asp-action="Index" class="btn btn-secondary">Volver</a></div>
+</form>
+
+<script>
+    function validarPrecio(input) {
+        let valor = input.value;
+
+        // Permitir solo números y un punto decimal
+        valor = valor.replace(/[^0-9.]/g, '');
+        valor = valor.replace(/(\..*?)\..*/g, '$1');
+
+        let partes = valor.split('.');
+        // Máximo 8 dígitos enteros
+        partes[0] = partes[0].slice(0, 8);
+        // Máximo 2 decimales
+        if (partes.length > 1) partes[1] = partes[1].slice(0, 2);
+
+        input.value = partes.join('.');
+    }
+</script>

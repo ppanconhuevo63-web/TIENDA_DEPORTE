@@ -1,0 +1,97 @@
+@model PRJ_SEMANA_03_S01.Models.DetalleCompra
+@{
+    var ordenes = ViewBag.Ordenes as List<PRJ_SEMANA_03_S01.Models.OrdenCompra>;
+    var productos = ViewBag.Productos as List<PRJ_SEMANA_03_S01.Models.Producto>;
+}
+<h2>Editar Detalle Compra</h2>
+
+<form asp-action="Edit" method="post" class="mt-3">
+    <!-- 1. CAMBIO: Cambia ModelOnly por All para asegurar que veas los mensajes -->
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <input asp-for="iddetallecompra" type="hidden" />
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Orden</label>
+            <select asp-for="idordencompra" asp-items="ViewBag.Ordenes" class="form-select bg-light" disabled></select>
+            <input type="hidden" asp-for="idordencompra" />
+
+            <!-- AGREGADO: Span de validación -->
+            <span asp-validation-for="idordencompra" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-8">
+            <label class="form-label">Producto</label>
+            <select asp-for="idproducto" asp-items="ViewBag.Productos" class="form-select bg-light" disabled></select>
+            <input type="hidden" asp-for="idproducto" />
+            <!-- CORREGIDO: El span va FUERA del foreach -->
+            <span asp-validation-for="idproducto" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Cantidad</label>
+            <input asp-for="cantidad"
+                   class="form-control"
+                   type="number"
+                   min="1"
+                   max="999999999"
+                   oninput="if(this.value>999999999) this.value=999999999;" />
+            <span asp-validation-for="cantidad" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Costo Unitario</label>
+
+            <input asp-for="costounitario"
+                   class="form-control"
+                   type="text"
+                   inputmode="decimal"
+                   oninput="validarPrecio(this)" />
+
+            <span asp-validation-for="costounitario" class="text-danger small"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Subtotal</label>
+            <input asp-for="subtotal" id="subtotal" readonly class="form-control bg-light" />
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-success">Guardar Cambios</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    function validarPrecio(input) {
+        let valor = input.value;
+
+        // ❌ eliminar todo excepto números y punto
+        valor = valor.replace(/[^0-9.]/g, '');
+
+        // ❌ eliminar comas explícitamente (por si acaso)
+        valor = valor.replace(/,/g, '');
+
+        // ❌ permitir solo un punto
+        valor = valor.replace(/(\..*?)\..*/g, '$1');
+
+        let partes = valor.split('.');
+
+        // 🔹 máximo 8 dígitos enteros
+        partes[0] = partes[0].slice(0, 8);
+
+        // 🔹 máximo 2 decimales
+        if (partes.length > 1) {
+            partes[1] = partes[1].slice(0, 2);
+        }
+
+        input.value = partes.join('.');
+    }
+</script>

@@ -1,0 +1,83 @@
+@model PRJ_SEMANA_03_S01.Models.Kardex
+@{
+    var productos = ViewBag.Productos as List<PRJ_SEMANA_03_S01.Models.Producto>;
+}
+
+<h2>Nuevo Kardex</h2>
+
+<form asp-action="Create" method="post" class="mt-3">
+    @* Cambiado a ModelOnly para que solo veas los errores bajo los campos *@
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="row g-3">
+        @* Producto *@
+        <div class="col-md-8">
+            <label class="form-label">Producto</label>
+            <select asp-for="idproducto" class="form-select">
+                <option value="0">-- Seleccione --</option>
+                @foreach (var p in productos ?? new())
+                {
+                    <option value="@p.idproducto">@p.nomproducto</option>
+                }
+            </select>
+            <span asp-validation-for="idproducto" class="text-danger"></span>
+        </div>
+
+        @* Fecha *@
+        <div class="col-md-4">
+            <label class="form-label">Fecha</label>
+            <input asp-for="fechamov" type="datetime-local" value="@Model.fechamov.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+            <span asp-validation-for="fechamov" class="text-danger"></span>
+        </div>
+
+        @* Tipo Movimiento *@
+        <div class="col-md-4">
+            <label class="form-label">Tipo</label>
+            <select asp-for="tipomov" class="form-select">
+                <option value="ENTRADA">ENTRADA</option>
+                <option value="SALIDA">SALIDA</option>
+            </select>
+            <span asp-validation-for="tipomov" class="text-danger"></span>
+        </div>
+
+        @* Cantidad *@
+        <div class="col-md-4">
+            <label class="form-label">Cantidad</label>
+            <input asp-for="cantidad" type="number" class="form-control" />
+            <span asp-validation-for="cantidad" class="text-danger"></span>
+        </div>
+
+        @* Costo Unitario *@
+        <div class="col-md-4">
+            <label class="form-label">Costo Unitario</label>
+            <input asp-for="costounitario" class="form-control" />
+            <span asp-validation-for="costounitario" class="text-danger"></span>
+        </div>
+
+        @* N° Factura *@
+        <div class="col-md-6">
+            <label class="form-label">N° Factura</label>
+            <input asp-for="nfactura" class="form-control" placeholder="Opcional" />
+            <span asp-validation-for="nfactura" class="text-danger"></span>
+        </div>
+
+        @* Observación *@
+        <div class="col-md-6">
+            <label class="form-label">Observación</label>
+            <input asp-for="observacion" class="form-control" placeholder="Opcional" />
+            <span asp-validation-for="observacion" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
+
+@section Scripts {
+    @* Importante para que la validación funcione sin recargar página si usas DataAnnotations *@
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="p-4 mb-4 bg-light rounded-3 border">
+    <div class="container-fluid py-3">
+        <h1 class="display-6 fw-bold">Sistema Web - Tienda Deportiva</h1>
+        <p class="col-md-10 fs-5">Proyecto MVC en ASP.NET Core .NET 10 adaptado a la base de datos <strong>TIENDA_DEPORTE_V6</strong>. Mantiene la lógica CRUD del proyecto original y agrega control de acceso por roles.</p>
+        <span class="badge bg-primary">Usuario: @User.Identity?.Name</span>
+        <span class="badge bg-success">Rol: @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</span>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Ventas</h5>
+                <p class="card-text">Clientes, ventas y detalle de venta con total automático desde el subtotal del detalle.</p>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Cliente" asp-action="Index">Clientes</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Venta" asp-action="Index">Ventas</a>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="DetalleVenta" asp-action="Index">Detalle</a>
+            </div>
+        </div>
+    </div>
+
+    @if (User.IsInRole("ADMIN") || User.IsInRole("ADMINISTRADOR"))
+    {
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Compras</h5>
+                    <a class="btn btn-outline-secondary btn-sm" asp-controller="Proveedor" asp-action="Index">Proveedor</a>
+                    <a class="btn btn-outline-secondary btn-sm" asp-controller="OrdenCompra" asp-action="Index">Orden Compra</a>
+                    <a class="btn btn-outline-secondary btn-sm" asp-controller="DetalleCompra" asp-action="Index">Detalle Compra</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Catálogos y seguridad</h5>
+                    <a class="btn btn-outline-dark btn-sm" asp-controller="Categoria" asp-action="Index">Categoría</a>
+                    <a class="btn btn-outline-dark btn-sm" asp-controller="Producto" asp-action="Index">Producto</a>
+                    <a class="btn btn-outline-dark btn-sm" asp-controller="Kardex" asp-action="Index">Kardex</a>
+                    <a class="btn btn-outline-dark btn-sm" asp-controller="Cargo" asp-action="Index">Cargo</a>
+                    <a class="btn btn-outline-dark btn-sm" asp-controller="Empleado" asp-action="Index">Empleado</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

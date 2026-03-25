@@ -1,0 +1,113 @@
+@model PRJ_SEMANA_03_S01.Models.DetalleVenta
+@{
+    var ventas = ViewBag.Ventas as List<PRJ_SEMANA_03_S01.Models.Venta>;
+    var productos = ViewBag.Productos as List<PRJ_SEMANA_03_S01.Models.Producto>;
+}
+
+<h2>Editar Detalle Venta</h2>
+
+<form asp-action="Edit" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    @* Campos ocultos necesarios para el POST *@
+    <input type="hidden" asp-for="iddetalleventa" />
+    <input type="hidden" asp-for="idproducto" /> @* Enviamos el ID aunque el select esté bloqueado *@
+
+    <div class="row g-3">
+        @* Venta (Bloqueada también, normalmente no se cambia de venta un detalle) *@
+        <div class="col-md-4">
+            <label class="form-label">Venta</label>
+            <select asp-for="idventa" asp-items="ViewBag.Ventas" class="form-select bg-light" disabled></select>
+            <input type="hidden" asp-for="idventa" />
+        </div>
+
+        @* Producto (BLOQUEADO) *@
+        <div class="col-md-8">
+            <label class="form-label">Producto</label>
+            @* Agregamos 'disabled' y 'bg-light' para que se vea como solo lectura *@
+            <select asp-for="idproducto" asp-items="ViewBag.Productos" class="form-select bg-light" disabled></select>
+            <input type="hidden" asp-for="idproducto" />
+            <small class="text-muted">El producto no se puede cambiar una vez registrado.</small>
+        </div>
+
+        @* Cantidad (Editable - Spinner) *@
+        <div class="col-md-4">
+            <label class="form-label">Cantidad</label>
+            <input asp-for="cantidad" id="cantidad"
+                   class="form-control"
+                   type="number"
+                   min="1"
+                   max="999999999"
+                   oninput="if(this.value>999999999) this.value=999999999;" />
+            <span asp-validation-for="cantidad" class="text-danger"></span>
+        </div>
+
+        @* Precio Unitario (Editable por si hubo un descuento manual) *@
+        <div class="col-md-4">
+            <label class="form-label">Precio Unitario</label>
+
+            <input asp-for="preciounitario" id="preciounitario"
+                   class="form-control"
+                   type="text"
+                   inputmode="decimal"
+                   oninput="validarPrecio(this)" />
+
+            <span asp-validation-for="preciounitario" class="text-danger small"></span>
+        </div>
+        @* Subtotal *@
+        <div class="col-md-4">
+            <label class="form-label">Subtotal</label>
+            <input asp-for="subtotal" id="subtotal" readonly class="form-control bg-light" />
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success">Actualizar Detalle</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function calcular() {
+            const c = parseFloat(document.getElementById('cantidad').value || 0);
+            const p = parseFloat(document.getElementById('preciounitario').value || 0);
+            document.getElementById('subtotal').value = (c * p).toFixed(2);
+        }
+
+        document.getElementById('cantidad').addEventListener('input', calcular);
+        document.getElementById('preciounitario').addEventListener('input', calcular);
+
+        // Ejecutar al cargar para mostrar el subtotal inicial
+        calcular();
+    </script>
+}
+<script>
+    function validarPrecio(input) {
+        let valor = input.value;
+
+        // ❌ eliminar todo excepto números y punto
+        valor = valor.replace(/[^0-9.]/g, '');
+
+        // ❌ eliminar comas explícitamente (por si acaso)
+        valor = valor.replace(/,/g, '');
+
+        // ❌ permitir solo un punto
+        valor = valor.replace(/(\..*?)\..*/g, '$1');
+
+        let partes = valor.split('.');
+
+        // 🔹 máximo 8 dígitos enteros
+        partes[0] = partes[0].slice(0, 8);
+
+        // 🔹 máximo 2 decimales
+        if (partes.length > 1) {
+            partes[1] = partes[1].slice(0, 2);
+        }
+
+        input.value = partes.join('.');
+    }
+</script>
