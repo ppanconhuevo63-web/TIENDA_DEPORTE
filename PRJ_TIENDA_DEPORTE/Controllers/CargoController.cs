@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using PRJ_SEMANA_03_S01.Models;
 using PRJ_SEMANA_03_S01.Helpers;
-sise puedoo
+sise puedoosjsjjsjs
 namespace PRJ_SEMANA_03_S01.Controllers
 {
     [Authorize(Roles = "ADMIN,ADMINISTRADOR")]
